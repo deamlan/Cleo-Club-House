@@ -35,8 +35,8 @@ def get_cluster(question):
     cluster_arr = lr.predict(question2d)
     cluster = cluster_arr[0].astype('U')
     
-    return 'Cluster label: ' + cluster
+    return cluster
 
 # driver function
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

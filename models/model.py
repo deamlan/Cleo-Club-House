@@ -22,7 +22,6 @@ from sklearn.linear_model import LogisticRegression
 
 def train_lr_model():
     data = pd.read_csv("assert.csv")
-    print("Succesfully parsed csv!")
 
     clean_data = []
     for i in range(0, data.shape[0]):
@@ -32,21 +31,16 @@ def train_lr_model():
         line = line.translate(translator)
         line = " ".join(line.split())
         clean_data.append(line)
-        print(line)
     
-    print("Successfully cleaned data! \n Starting embedder")
     embedder = SentenceTransformer('distilbert-base-nli-mean-tokens')
     clean_data_embeddings = embedder.encode(clean_data)
-    print("Here is the embedded data:\n", clean_data_embeddings)
 
-    print("started shaping clean data...")
-    print((clean_data_embeddings).shape)
-    print((clean_data_embeddings).ndim)
+    (clean_data_embeddings).shape
+    (clean_data_embeddings).ndim
 
     df = pd.DataFrame(clean_data_embeddings)
 
     df['cluster']=data['cluster']
-    print("df.head() :\n", df.head())
 
     df = df.sample(frac=1, random_state=42)   
     X = df.drop('cluster', axis=1)
@@ -55,18 +49,14 @@ def train_lr_model():
     # Split the dataset into training and testing sets
     #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
     # Split data into training and testing sets
-    print("Started spliting training and test data ...")
     train_data, test_data, train_labels, test_labels = train_test_split(X,Y, test_size=0.1, random_state=42)
-    print("train data: \n", train_data)
 
     # Train a Linear Regression model
-    print("Training LR model...")
     lr = LogisticRegression(max_iter=1200,random_state=0)
     lr.fit(train_data, train_labels)
 
     # Predict target values on the test set
     y_pred = lr.predict(test_data)
-    print((test_data).shape)
     
-    # return model variable
+    # return model object
     return lr
