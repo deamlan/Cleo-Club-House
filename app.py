@@ -13,6 +13,11 @@ lr = model.train_lr_model()
 def index():
     return render_template('index.html')
 
+# test api
+@app.route('/test-ui')
+def test_ui():
+    return render_template('h.html')
+
 
 # dummy api to test UI
 @app.route('/api/v1.0/get-dummy-answer/<question>')
