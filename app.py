@@ -11,7 +11,12 @@ lr = model.train_lr_model()
 # index route
 @app.route('/')
 def index():
-    return 'Work in progress'
+    return render_template('index.html')
+
+# test api
+@app.route('/test-ui')
+def test_ui():
+    return render_template('h.html')
 
 
 # dummy api to test UI
