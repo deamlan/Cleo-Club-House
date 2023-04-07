@@ -9,7 +9,7 @@ answer_data=pd.read_csv("Book1.csv")
 
 app = Flask(__name__)
 
-lr = model.train_lr_model()
+nn = model.train_lr_model()
 
 # index route
 @app.route('/')
@@ -17,16 +17,16 @@ def index():
     return render_template('index.html')
 
 # test api
-@app.route('/test-ui')
-def test_ui():
-    return render_template('test-index.html')
+# @app.route('/test-ui')
+# def test_ui():
+#     return render_template('test-index.html')
 
 
 # dummy api to test UI
-@app.route('/api/v1.0/get-dummy-answer/<question>')
-def get_dummy_answer(question):
-    ans = '# To be edited #'
-    return render_template('dummy-api.html', question=question, ans=ans)
+# @app.route('/api/v1.0/get-dummy-answer/<question>')
+# def get_dummy_answer(question):
+#     ans = '# To be edited #'
+#     return render_template('dummy-api.html', question=question, ans=ans)
 
 
 # get_cluster API get the cluster label for the given question
@@ -40,12 +40,19 @@ def get_cluster(question):
     question = embedder.encode(question)
     question2d = question.reshape(1, 768)
 
-    cluster_arr = lr.predict(question2d)
-    cluster = cluster_arr[0].astype('U')
+    cluster_arr = nn.predict(question2d)
+    #cluster = cluster_arr[0].astype('U')
+    max_res=max(question2d)
+    max_val=max(max_res)
+    val=0
+    for i in range(0,len(max_res)):
+        if max_res[i]==max_val:
+            val=i
+            break
 
     #choose the random question
-    cluster1=cluster
-    if cluster1==40:
+    cluster1=val
+    if cluster1==57:
         cluster1=cluster1-1
     else:
         cluster1=cluster1+1
@@ -57,7 +64,7 @@ def get_cluster(question):
     random_question = cluster_question[random_index]
 
     #Select the answer
-    answer=answer_data['answer'].iloc[cluster-1]
+    answer=answer_data['answer'].iloc[val-1]
     return answer,random_question
 
 # driver function
