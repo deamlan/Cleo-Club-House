@@ -4,24 +4,11 @@ import string
 from sentence_transformers import SentenceTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-# import numpy as np
-# import re
-# import nltk
-#from sklearn.linear_model import LinearRegression
-#from sklearn.naive_bayes import MultinomialNB
-#from sklearn.metrics import mean_squared_error
-#from sklearn.feature_extraction.text import CountVectorizer
-#from sklearn.naive_bayes import MultinomialNB
-#from sklearn.metrics import accuracy_score
-#import matplotlib.pyplot as plt
-#from sklearn.naive_bayes import GaussianNB
-#from sklearn.neighbors import KNeighborsClassifier
-#from sklearn.ensemble import RandomForestClassifier
-#from sklearn.tree import DecisionTreeClassifier
-#from sklearn.svm import SVC
 
+#Clearing sentences
 def train_lr_model():
     data = pd.read_csv("assert.csv")
+    cluster_data=data
 
     clean_data = []
     for i in range(0, data.shape[0]):
@@ -31,12 +18,12 @@ def train_lr_model():
         line = line.translate(translator)
         line = " ".join(line.split())
         clean_data.append(line)
-    
+
+#Transforming sentences into matrix:
+
     embedder = SentenceTransformer('distilbert-base-nli-mean-tokens')
     clean_data_embeddings = embedder.encode(clean_data)
 
-    (clean_data_embeddings).shape
-    (clean_data_embeddings).ndim
 
     df = pd.DataFrame(clean_data_embeddings)
 
@@ -59,4 +46,4 @@ def train_lr_model():
     y_pred = lr.predict(test_data)
     
     # return model object
-    return lr
+    return lr,cluster_data

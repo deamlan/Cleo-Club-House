@@ -1,4 +1,5 @@
-const chatGPT = new Worker('http://localhost:8000/chatGPT.js');
+
+const chatGPT = new Worker('http://127.0.0.1:5000//static//chatGPT.js');
 
 const chatGPTResp = document.querySelector(".chatGPTResponse");
 

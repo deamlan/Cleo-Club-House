@@ -1,8 +1,11 @@
 from flask import Flask, render_template
 import models.model as model
 import string
+import pandas as pd
 from sentence_transformers import SentenceTransformer
+import random
 
+answer_data=pd.read_csv("Book1.csv")
 
 app = Flask(__name__)
 
@@ -16,7 +19,7 @@ def index():
 # test api
 @app.route('/test-ui')
 def test_ui():
-    return render_template('h.html')
+    return render_template('test-index.html')
 
 
 # dummy api to test UI
@@ -39,8 +42,23 @@ def get_cluster(question):
 
     cluster_arr = lr.predict(question2d)
     cluster = cluster_arr[0].astype('U')
-    
-    return cluster
+
+    #choose the random question
+    cluster1=cluster
+    if cluster1==40:
+        cluster1=cluster1-1
+    else:
+        cluster1=cluster1+1
+    cluster_data = cluster_data[cluster_data.cluster==cluster1]
+    cluster_question=cluster_data['Questions'].values
+    random_index = random.randint(0, len(cluster_question)-1)
+
+    # Select the random question
+    random_question = cluster_question[random_index]
+
+    #Select the answer
+    answer=answer_data['answer'].iloc[cluster-1]
+    return answer,random_question
 
 # driver function
 if __name__ == '__main__':
